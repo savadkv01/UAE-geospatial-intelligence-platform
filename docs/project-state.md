@@ -15,13 +15,13 @@
 ## Active Stage
 
 - **Active stage:** none
-- **Next action:** run `01-business-requirements` from the prompt picker or with `Chat: Run Prompt...`.
+- **Next action:** run `02-domain-and-measurement` when ready; it is not started automatically.
 
 ## Stage Status
 
 | # | Stage | Status | Approved outputs / evidence | Notes |
 | --- | --- | --- | --- | --- |
-| 01 | Business requirements | not started | — | — |
+| 01 | Business requirements | complete | [Approved requirements](requirements.md); [ADR 0001](decisions/0001-audience-and-mvp-priorities.md); [ADR 0002](decisions/0002-batch-observation-window-cadence.md); [ADR 0003](decisions/0003-acceptance-target-frameworks-and-non-goals.md) | Document review passed and user accepted the Stage 01 outcome. |
 | 02 | Domain and measurement | not started | — | — |
 | 03 | Source discovery and profiling | not started | — | — |
 | 04 | AOI and feasibility pilot | not started | — | — |
@@ -45,11 +45,13 @@
 
 ## Approved Requirements
 
-_None yet. Stage 01 owns this list; link to `docs/requirements.md` after approval._
+[Approved requirements](requirements.md) — accepted by the user on 2026-11-11.
 
 ## Unresolved Decisions
 
-_None recorded yet._
+- Exact observation-window length and freshness deadline; resolve with source/runtime evidence in Stages 03, 13 and 18.
+- Analytical reference source, metric selection, and numeric agreement and coverage thresholds; resolve in Stage 12, informed by Stages 03–04.
+- Analyst workflow details and whether secondary stakeholder personas are needed; validate in Stage 02.
 
 ## Invalidated Approvals
 
@@ -57,12 +59,14 @@ _None._
 
 ## Evidence Links
 
-_None yet._
+- [Business requirements](requirements.md)
+- [Decision index](decisions/README.md)
 
 ## Checks Run
 
 | Date | Stage | Command / review | Environment | Result |
 | --- | --- | --- | --- | --- |
+| 2026-11-11 | 01 | Document review against Stage 01 acceptance checks and user acceptance | Repository files; no external data or downloads | Passed; Stage 01 accepted |
 
 ## Blockers
 

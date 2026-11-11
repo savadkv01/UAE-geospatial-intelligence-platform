@@ -12,7 +12,9 @@ This folder holds numbered decision records (ADRs) for material project decision
 
 | ADR | Title | Status | Stage | Date |
 | --- | --- | --- | --- | --- |
-| _none yet_ | | | | |
+| [0001](0001-audience-and-mvp-priorities.md) | Audience and MVP Priorities | accepted | 01 | 2026-11-11 |
+| [0002](0002-batch-observation-window-cadence.md) | Batch Observation-Window Cadence | accepted | 01 | 2026-11-11 |
+| [0003](0003-acceptance-target-frameworks-and-non-goals.md) | Acceptance Target Frameworks and Non-goals | accepted | 01 | 2026-11-11 |
 
 ## Template
 
