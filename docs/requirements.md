@@ -15,13 +15,13 @@
 
 | Persona | Need | Status |
 | --- | --- | --- |
-| Geospatial analyst (primary) | Review and interpret candidate change signals and their coverage and uncertainty. | Approved audience; workflow details remain an assumption. |
+| Geospatial analyst (primary) | Review and interpret candidate change signals and their coverage and uncertainty. | Approved audience; workflow confirmed in Stage 02 (2026-11-14). |
 
-Other stakeholders, such as planning/environment reviewers and engineering or portfolio reviewers, are candidates to validate, not approved primary personas.
+Other stakeholders, such as planning/environment reviewers and engineering or portfolio reviewers, are candidates to validate, not approved primary personas. In Stage 02 the user confirmed the geospatial analyst as the **only** persona; no secondary persona is added.
 
 ## Analyst Workflow
 
-**Assumption A-01 (to validate in Stage 02):** an analyst discovers a product for an observation window, reviews its candidate signal and valid-data coverage, compares it with other windows, and interprets it alongside reference evidence. Product interaction and any annotation workflow are not yet specified.
+**A-01 (confirmed by the user in Stage 02, 2026-11-14):** an analyst discovers a product for an observation window, reviews its candidate signal and valid-data coverage, compares it with other windows, and interprets it alongside reference evidence. Product interaction and any annotation workflow remain unspecified and belong to Stage 15. Measurement definitions are in the [measurement specification](measurement-spec.md).
 
 ## Business Questions
 
@@ -91,7 +91,7 @@ AC-04 and AC-05 are user-approved **proposed target frameworks**, not claims of 
 
 | ID | Item | Owner / resolution point | Status |
 | --- | --- | --- | --- |
-| A-01 | Validate the analyst workflow and whether secondary stakeholder personas are needed. | Stage 02 | Assumption |
+| A-01 | Validate the analyst workflow and whether secondary stakeholder personas are needed. | Stage 02 | Confirmed 2026-11-14: workflow as stated; single analyst persona |
 | OQ-01 | Select the observation-window length and define freshness expectations using source and runtime evidence. | Stages 03, 13, 18 | Deferred |
 | OQ-02 | Select reference evidence, suitable agreement metrics, and numeric analytical and coverage thresholds. | Stage 12, informed by Stages 03–04 | Deferred |
 
@@ -102,20 +102,24 @@ Statuses distinguish approved requirements and proposed targets from assumptions
 | Requirement ID | Description | Owning stage(s) | Evidence expected | Status |
 | --- | --- | --- | --- | --- |
 | BR-01 | Serve an analyst-facing monitoring use case with an engineering showcase. | 05, 15, 20 | Architecture and analyst-serving design aligned with the approved audience; portfolio narrative. | Approved |
-| BR-02 | Preserve the user-approved priority order and represent all five capabilities as MVP or deferred. | 02, 04, 12, 15 | Domain definitions, feasibility decision, product coverage, and analyst catalogue. | Approved |
+| BR-02 | Preserve the user-approved priority order and represent all five capabilities as MVP or deferred. | 02, 04, 12, 15 | Domain definitions, feasibility decision, product coverage, and analyst catalogue. | Approved; Stage 02 domain definitions done ([measurement spec](measurement-spec.md): full MVP rows, provisional deferred rows) |
 | BR-03 | Process by observation window; determine the exact window and freshness expectation using evidence. | 03, 05, 08, 09, 13, 18, 19 | Source cadence profile, architecture/orchestration configuration, and measured run evidence. | Approved; window deferred |
-| BR-04 | Present satellite-derived change as a candidate signal requiring interpretation, not a fact or causal claim. | 02, 12, 14, 15, 20 | Domain definitions, product limitations, quality checks, and user-facing explanations. | Approved |
+| BR-04 | Present satellite-derived change as a candidate signal requiring interpretation, not a fact or causal claim. | 02, 12, 14, 15, 20 | Domain definitions, product limitations, quality checks, and user-facing explanations. | Approved; Stage 02 "cannot claim" statements and persistence semantics defined ([ADR 0005](decisions/0005-persistence-confirmed-change-semantics.md)) |
 | BR-05 | Include candidate urban expansion and vegetation change in the MVP; defer the other three capabilities. | 04, 12 | Feasibility evidence and MVP product evaluation. | Approved |
 | BR-06 | Exclude parcel-level claims, real-time alerting, causal attribution, and ground-truth equivalence claims. | 07, 12, 15, 20 | Governance constraints, analytical outputs, serving behavior, and documentation. | Approved |
-| A-01 | Validate analyst workflow details and secondary personas. | 02, 15, 20 | Confirmed workflow/persona needs and serving design. | Assumption |
+| A-01 | Validate analyst workflow details and secondary personas. | 02, 15, 20 | Confirmed workflow/persona needs and serving design. | Confirmed in Stage 02 (single analyst persona); interaction details to Stage 15 |
 | AC-01 | Same-input/configuration rerun produces zero duplicate published products. | 08, 13, 14, 19 | Repeat-run and duplicate-check evidence. | Proposed target |
 | AC-02 | Demonstrate recovery from a controlled task failure with consistent output state. | 08, 13, 14, 16, 19 | Failure/recovery run history and output consistency check. | Proposed target |
 | AC-03 | Define and measure a freshness deadline for the selected cadence. | 03, 13, 16, 18 | Approved deadline and timestamp evidence. | Deferred |
-| AC-04 | Evaluate candidate outputs against labelled reference evidence using suitable agreement metrics. | 02, 03, 04, 12, 14 | Evaluation report with source, sample, metric definitions, and results. | Proposed target; specifics to Stage 12 |
-| AC-05 | Report valid-observation coverage and uncertainty; assess against a later-approved threshold. | 02, 04, 10, 12, 14, 15 | Per-product coverage/uncertainty metadata and threshold check. | Proposed target; threshold to Stage 12 |
+| AC-04 | Evaluate candidate outputs against labelled reference evidence using suitable agreement metrics. | 02, 03, 04, 12, 14 | Evaluation report with source, sample, metric definitions, and results. | Proposed target; Stage 02 validation ideas recorded in [measurement spec](measurement-spec.md); specifics to Stage 12 |
+| AC-05 | Report valid-observation coverage and uncertainty; assess against a later-approved threshold. | 02, 04, 10, 12, 14, 15 | Per-product coverage/uncertainty metadata and threshold check. | Proposed target; uncertainty representation defined ([ADR 0007](decisions/0007-uncertainty-communication.md)); threshold to Stage 12 |
 
 ## Decision Records
 
 - [ADR 0001 — Audience and MVP priorities](decisions/0001-audience-and-mvp-priorities.md)
 - [ADR 0002 — Batch observation-window cadence](decisions/0002-batch-observation-window-cadence.md)
 - [ADR 0003 — Acceptance target frameworks and non-goals](decisions/0003-acceptance-target-frameworks-and-non-goals.md)
+- [ADR 0004 — MVP indicator families](decisions/0004-mvp-indicator-families.md)
+- [ADR 0005 — Persistence-confirmed change semantics](decisions/0005-persistence-confirmed-change-semantics.md)
+- [ADR 0006 — Temporal comparability policy](decisions/0006-temporal-comparability-policy.md)
+- [ADR 0007 — Uncertainty communication](decisions/0007-uncertainty-communication.md)

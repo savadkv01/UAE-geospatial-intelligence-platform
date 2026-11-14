@@ -15,6 +15,10 @@ This folder holds numbered decision records (ADRs) for material project decision
 | [0001](0001-audience-and-mvp-priorities.md) | Audience and MVP Priorities | accepted | 01 | 2026-11-11 |
 | [0002](0002-batch-observation-window-cadence.md) | Batch Observation-Window Cadence | accepted | 01 | 2026-11-11 |
 | [0003](0003-acceptance-target-frameworks-and-non-goals.md) | Acceptance Target Frameworks and Non-goals | accepted | 01 | 2026-11-11 |
+| [0004](0004-mvp-indicator-families.md) | MVP Indicator Families | accepted | 02 | 2026-11-14 |
+| [0005](0005-persistence-confirmed-change-semantics.md) | Persistence-Confirmed Change Semantics | accepted | 02 | 2026-11-14 |
+| [0006](0006-temporal-comparability-policy.md) | Temporal Comparability Policy | accepted | 02 | 2026-11-14 |
+| [0007](0007-uncertainty-communication.md) | Uncertainty Communication | accepted | 02 | 2026-11-14 |
 
 ## Template
 
