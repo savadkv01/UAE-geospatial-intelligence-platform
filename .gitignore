@@ -1,0 +1,20 @@
+# Secrets and local configuration
+.env
+.env.*
+
+# Disposable scratch data, probes and environments
+.scratch/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Raster, archive and bulk data must never be committed
+*.tif
+*.tiff
+*.jp2
+*.zip
+*.SAFE/
+*.nc
+*.parquet
+*.osm.pbf

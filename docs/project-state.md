@@ -15,7 +15,7 @@
 ## Active Stage
 
 - **Active stage:** none
-- **Next action:** run `03-source-discovery-and-profiling` when ready; it is not started automatically.
+- **Next action:** run `04-aoi-and-feasibility-pilot` when ready; it is not started automatically.
 
 ## Stage Status
 
@@ -23,7 +23,7 @@
 | --- | --- | --- | --- | --- |
 | 01 | Business requirements | complete | [Approved requirements](requirements.md); [ADR 0001](decisions/0001-audience-and-mvp-priorities.md); [ADR 0002](decisions/0002-batch-observation-window-cadence.md); [ADR 0003](decisions/0003-acceptance-target-frameworks-and-non-goals.md) | Document review passed and user accepted the Stage 01 outcome. |
 | 02 | Domain and measurement | complete | [Domain glossary](domain-glossary.md); [Measurement spec](measurement-spec.md); [ADR 0004](decisions/0004-mvp-indicator-families.md); [ADR 0005](decisions/0005-persistence-confirmed-change-semantics.md); [ADR 0006](decisions/0006-temporal-comparability-policy.md); [ADR 0007](decisions/0007-uncertainty-communication.md) | Document review passed and user accepted the Stage 02 outcome on 2026-11-14. |
-| 03 | Source discovery and profiling | not started | — | — |
+| 03 | Source discovery and profiling | complete | [Source register](source-register.md); [Profiling report](profiling-report.md); [Probe script](../tools/probes/stage03_source_probe.py); [ADR 0008](decisions/0008-upstream-stac-providers-and-access-model.md); [ADR 0009](decisions/0009-sentinel-2-l2a-mvp-source.md); [ADR 0010](decisions/0010-sentinel-1-grd-mvp-source-and-level.md); [ADR 0011](decisions/0011-context-layers-and-reference-candidates.md) | Register, report and MVP sources approved on 2026-11-14 (S2 = Earth Search c1 with CDSE fallback; S1 = PC GRD with Earth Search and CDSE fallbacks). Probe used ≤ 0.33 GB of the 1 GB budget. Acceptance checks passed; user accepted the Stage 03 outcome on 2026-11-14. |
 | 04 | AOI and feasibility pilot | not started | — | — |
 | 05 | Solution and data architecture | not started | — | — |
 | 06 | Data modelling and contracts | not started | — | — |
@@ -53,10 +53,14 @@
 - Analytical reference source, metric selection, and numeric agreement and coverage thresholds; resolve in Stage 12, informed by Stages 03–04.
 - Persistence N (proposed 2–3), minimum mapping unit, compositing method, confidence-class rules, and whether to mask SCL class 2; resolve with evidence in Stages 04 and 12.
 - Common target CRS for an AOI spanning UTM 39N/40N; resolve in Stage 04 or 10.
-- SAR calibration choice (σ⁰ vs terrain-flattened γ⁰); resolve in Stage 03 or 10.
+- SAR calibration choice: **resolved for the MVP** as σ⁰ from GRD ([ADR 0010](decisions/0010-sentinel-1-grd-mvp-source-and-level.md)); the method is owned by Stage 10.
 - Index families for the deferred capabilities (water, coastal, multi-year) and tide normalisation; decide when each enters scope.
+- CDSE S3 keys are the first platform secret; storage and rotation to be defined in Stage 07 ([ADR 0008](decisions/0008-upstream-stac-providers-and-access-model.md)).
 
-**Open questions for Stage 03 (source verification):** Sentinel-1 IW GRD and Sentinel-2 L2A (Collection-1 / harmonised) access, licensing, archive depth, revisit over Abu Dhabi and per-scene volume; GHSL R2023A and OSM terms for use as reference context; candidate reference imagery for labelling (licence); any free tide data source.
+**Open items from Stage 03, for Stage 04 and later:**
+- Re-measure Earth Search c1 coverage for the chosen AOI and seasons, including the unexplained 2022 gap.
+- Check whether pre-2025 S1 revisit (≈ 12 days per track, S1A only) gives enough scenes per window for N-window persistence.
+- Gaps: no free tide-data source has been researched or verified; terms for viewing very-high-resolution basemaps are unverified ([source register](source-register.md) §2).
 
 ## Invalidated Approvals
 
@@ -68,6 +72,9 @@ _None._
 - [Domain glossary](domain-glossary.md)
 - [Measurement specification](measurement-spec.md)
 - [Decision index](decisions/README.md)
+- [Source register](source-register.md)
+- [Profiling report](profiling-report.md)
+- [Source guide](source-guide.md) (learning companion for the Stage 03 sources)
 
 ## Checks Run
 
@@ -76,6 +83,9 @@ _None._
 | 2026-11-11 | 01 | Document review against Stage 01 acceptance checks and user acceptance | Repository files; no external data or downloads | Passed; Stage 01 accepted |
 | 2026-11-14 | 02 | Web verification of index formulas, sensor specifications and GHSL epoch semantics (ESA SentiWiki, ESA STEP forum, ASF HyP3, JRC GHSL catalogue, peer-reviewed citations) | Web search and fetch; no data downloads | Citations verified; MDPI full text blocked (HTTP 403), not relied on |
 | 2026-11-14 | 02 | Document review against Stage 02 acceptance checks | Repository files | Passed: both MVP rows complete including "cannot claim"; every formula cited; arid and coastal confounders addressed; no threshold presented as validated |
+| 2026-11-14 | 03 | Official documentation and live STAC collection metadata for licences, access and quotas (CDSE, PC, Earth Search, AWS Registry, JRC GHSL, OSM, EC Sentinel legal notice) | Web fetch and search | Verified; the ESA-hosted Sentinel legal notice URL failed DNS, so the EC copy hosted by ECMWF was used |
+| 2026-11-14 | 03 | Bounded probe `.scratch/stage03/probe.py` (env, catalog, access, s2, s1, worldcover, ghsl, osm, cdse) | Windows 11, Python 3.13.14, rasterio 1.5.2 / GDAL 3.12.2, pystac-client 0.9.1; disposable venv | Completed within budget (≤ 0.33 GB of 1 GB); 12 anomalies recorded in the [profiling report](profiling-report.md) |
+| 2026-11-14 | 03 (follow-up) | [Source guide](source-guide.md): mission facts checked against ESA SentiWiki, ESA, GDAL and cogeo.org; code examples run via `.scratch/stage03/guide_examples.py` and the guide's own snippets extracted and run as-is | Same probe environment; ≈ 20 MB per run | Passed; found and documented the negative-reflectance / NDVI-range pitfall |
 
 ## Blockers
 

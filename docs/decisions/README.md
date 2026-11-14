@@ -19,6 +19,10 @@ This folder holds numbered decision records (ADRs) for material project decision
 | [0005](0005-persistence-confirmed-change-semantics.md) | Persistence-Confirmed Change Semantics | accepted | 02 | 2026-11-14 |
 | [0006](0006-temporal-comparability-policy.md) | Temporal Comparability Policy | accepted | 02 | 2026-11-14 |
 | [0007](0007-uncertainty-communication.md) | Uncertainty Communication | accepted | 02 | 2026-11-14 |
+| [0008](0008-upstream-stac-providers-and-access-model.md) | Upstream STAC Providers and Access Model | accepted | 03 | 2026-11-14 |
+| [0009](0009-sentinel-2-l2a-mvp-source.md) | Sentinel-2 L2A MVP Source | accepted | 03 | 2026-11-14 |
+| [0010](0010-sentinel-1-grd-mvp-source-and-level.md) | Sentinel-1 GRD MVP Source and Product Level | accepted | 03 | 2026-11-14 |
+| [0011](0011-context-layers-and-reference-candidates.md) | Context Layers and Reference-Evidence Candidates | accepted | 03 | 2026-11-14 |
 
 ## Template
 
