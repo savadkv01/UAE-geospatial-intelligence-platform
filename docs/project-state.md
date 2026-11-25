@@ -88,6 +88,7 @@
 - [Source guide](source-guide.md) (learning companion for the Stage 03 sources)
 - [Feasibility pilot](feasibility-pilot.md)
 - [Solution and data architecture](architecture.md)
+- [Data architecture playbook](data-architecture-playbook.md) (learning companion: step-by-step enterprise method with a fictional EO-company case study)
 - [Pilot AOI file](../config/aoi/abu-dhabi-pilot-v1.geojson)
 - [Domain knowledge handbook](domain-knowledge.md) (learning companion across stages; extend at the end of each stage)
 
