@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "name": "abu-dhabi-pilot-v1",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "abu-dhabi-pilot-v1",
+      "properties": {
+        "name": "Abu Dhabi pilot AOI",
+        "version": "1.0.0",
+        "status": "accepted",
+        "decision": "docs/decisions/0013-pilot-aoi.md",
+        "created": "2026-11-24",
+        "storage_crs": "EPSG:4326",
+        "processing_crs": "EPSG:32640",
+        "processing_grid_m": 10,
+        "parts": [
+          {
+            "index": 0,
+            "id": "mainland-corridor",
+            "description": "Mainland growth corridor: Riyadh City, Al Shamkha, Khalifa City A, Mohamed Bin Zayed City, Al Wathba",
+            "role": "urban expansion (primary) and vegetation context",
+            "definition": "lon/lat rectangle 54.55-54.80 E, 24.25-24.45 N",
+            "area_km2_geodesic": 562
+          },
+          {
+            "index": 1,
+            "id": "al-ain-vegetation-patch",
+            "description": "Al Ain farm and oasis-fringe patch, south-west of Al Ain city, inside the UAE",
+            "role": "vegetation change (primary)",
+            "definition": "exact 10 km x 10 km square on the EPSG:32640 grid, upper-left x=359100 y=2680500, corners converted to lon/lat",
+            "area_km2_geodesic": 100
+          }
+        ]
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [54.55, 24.25],
+              [54.80, 24.25],
+              [54.80, 24.45],
+              [54.55, 24.45],
+              [54.55, 24.25]
+            ]
+          ],
+          [
+            [
+              [55.613282, 24.140686],
+              [55.711681, 24.141548],
+              [55.710773, 24.231846],
+              [55.612306, 24.230980],
+              [55.613282, 24.140686]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

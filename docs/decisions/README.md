@@ -23,6 +23,10 @@ This folder holds numbered decision records (ADRs) for material project decision
 | [0009](0009-sentinel-2-l2a-mvp-source.md) | Sentinel-2 L2A MVP Source | accepted | 03 | 2026-11-14 |
 | [0010](0010-sentinel-1-grd-mvp-source-and-level.md) | Sentinel-1 GRD MVP Source and Product Level | accepted | 03 | 2026-11-14 |
 | [0011](0011-context-layers-and-reference-candidates.md) | Context Layers and Reference-Evidence Candidates | accepted | 03 | 2026-11-14 |
+| [0012](0012-laptop-constraints-and-data-budgets.md) | Laptop Constraints and Data Budgets | accepted | 04 | 2026-11-24 |
+| [0013](0013-pilot-aoi.md) | Pilot AOI | accepted | 04 | 2026-11-24 |
+| [0014](0014-observation-period-and-window.md) | Observation Period and Window | accepted | 04 | 2026-11-24 |
+| [0015](0015-feasibility-pilot-gates-and-outcome.md) | Feasibility Pilot Gates and Outcome (go with waiver) | accepted | 04 | 2026-11-24 |
 
 ## Template
 

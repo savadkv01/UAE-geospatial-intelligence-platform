@@ -15,7 +15,7 @@
 ## Active Stage
 
 - **Active stage:** none
-- **Next action:** run `04-aoi-and-feasibility-pilot` when ready; it is not started automatically.
+- **Next action:** run `05-solution-and-data-architecture` when ready; it is not started automatically.
 
 ## Stage Status
 
@@ -24,7 +24,7 @@
 | 01 | Business requirements | complete | [Approved requirements](requirements.md); [ADR 0001](decisions/0001-audience-and-mvp-priorities.md); [ADR 0002](decisions/0002-batch-observation-window-cadence.md); [ADR 0003](decisions/0003-acceptance-target-frameworks-and-non-goals.md) | Document review passed and user accepted the Stage 01 outcome. |
 | 02 | Domain and measurement | complete | [Domain glossary](domain-glossary.md); [Measurement spec](measurement-spec.md); [ADR 0004](decisions/0004-mvp-indicator-families.md); [ADR 0005](decisions/0005-persistence-confirmed-change-semantics.md); [ADR 0006](decisions/0006-temporal-comparability-policy.md); [ADR 0007](decisions/0007-uncertainty-communication.md) | Document review passed and user accepted the Stage 02 outcome on 2026-11-14. |
 | 03 | Source discovery and profiling | complete | [Source register](source-register.md); [Profiling report](profiling-report.md); [Probe script](../tools/probes/stage03_source_probe.py); [ADR 0008](decisions/0008-upstream-stac-providers-and-access-model.md); [ADR 0009](decisions/0009-sentinel-2-l2a-mvp-source.md); [ADR 0010](decisions/0010-sentinel-1-grd-mvp-source-and-level.md); [ADR 0011](decisions/0011-context-layers-and-reference-candidates.md) | Register, report and MVP sources approved on 2026-11-14 (S2 = Earth Search c1 with CDSE fallback; S1 = PC GRD with Earth Search and CDSE fallbacks). Probe used ≤ 0.33 GB of the 1 GB budget. Acceptance checks passed; user accepted the Stage 03 outcome on 2026-11-14. |
-| 04 | AOI and feasibility pilot | not started | — | — |
+| 04 | AOI and feasibility pilot | complete | [Feasibility pilot](feasibility-pilot.md); [AOI file](../config/aoi/abu-dhabi-pilot-v1.geojson); probes [compare](../tools/probes/stage04_aoi_compare.py), [pilot 1](../tools/probes/stage04_pilot.py), [pilot 2](../tools/probes/stage04_pilot2.py); [ADR 0012](decisions/0012-laptop-constraints-and-data-budgets.md); [ADR 0013](decisions/0013-pilot-aoi.md); [ADR 0014](decisions/0014-observation-period-and-window.md); [ADR 0015](decisions/0015-feasibility-pilot-gates-and-outcome.md) | Outcome **go with recorded waiver** (G4 desert control C3 and G5a U1 failed; waived by the user). AOI = corridor (c) 562 km² + Al Ain patch 100 km², EPSG:32640; period P1 (Dec–Feb 2019/20–2025/26, 2021/22 Dec only). Pilot spend 2.32 GB (cap 2.6 GB); full scope ≈ 8.0 GB download, ≈ 11.3 GB disk (estimates). User accepted the Stage 04 outcome on 2026-11-24. |
 | 05 | Solution and data architecture | not started | — | — |
 | 06 | Data modelling and contracts | not started | — | — |
 | 07 | Governance and security design | not started | — | — |
@@ -49,18 +49,26 @@
 
 ## Unresolved Decisions
 
-- Exact observation-window length and freshness deadline; resolve with source/runtime evidence in Stages 03, 13 and 18.
-- Analytical reference source, metric selection, and numeric agreement and coverage thresholds; resolve in Stage 12, informed by Stages 03–04.
-- Persistence N (proposed 2–3), minimum mapping unit, compositing method, confidence-class rules, and whether to mask SCL class 2; resolve with evidence in Stages 04 and 12.
-- Common target CRS for an AOI spanning UTM 39N/40N; resolve in Stage 04 or 10.
+- Exact observation-window length: **resolved** as Dec–Feb anniversary windows ([ADR 0014](decisions/0014-observation-period-and-window.md)). The freshness deadline remains open (Stages 13 and 18); annual windows with N = 2–3 imply 2–3 years of detection latency.
+- Analytical reference source, metric selection, and numeric agreement and coverage thresholds; resolve in Stage 12. Stage 04 inputs: desert-control σ⁰ drift ≈ 1.7 dB; urban controls ≤ 0.6 dB; NDVI control drift ≤ 0.027 ([feasibility pilot](feasibility-pilot.md) §5).
+- Persistence N (proposed 2–3), minimum mapping unit, compositing method and confidence-class rules; resolve in Stage 12. **SCL class 2 evidence (Stage 04):** ≤ 0.001 % of bare-land pixels on the selected winter dates, so masking it makes negligible difference in this AOI.
+- Common target CRS: **resolved for this AOI** as EPSG:32640, 10 m ([ADR 0013](decisions/0013-pilot-aoi.md)). The corridor's 39N tiles must be reprojected (Stage 10).
 - SAR calibration choice: **resolved for the MVP** as σ⁰ from GRD ([ADR 0010](decisions/0010-sentinel-1-grd-mvp-source-and-level.md)); the method is owned by Stage 10.
 - Index families for the deferred capabilities (water, coastal, multi-year) and tide normalisation; decide when each enters scope.
 - CDSE S3 keys are the first platform secret; storage and rotation to be defined in Stage 07 ([ADR 0008](decisions/0008-upstream-stac-providers-and-access-model.md)).
 
-**Open items from Stage 03, for Stage 04 and later:**
-- Re-measure Earth Search c1 coverage for the chosen AOI and seasons, including the unexplained 2022 gap.
-- Check whether pre-2025 S1 revisit (≈ 12 days per track, S1A only) gives enough scenes per window for N-window persistence.
-- Gaps: no free tide-data source has been researched or verified; terms for viewing very-high-resolution basemaps are unverified ([source register](source-register.md) §2).
+**Open items from Stage 03 — status after Stage 04:**
+- Earth Search c1 coverage re-measured for the chosen AOI: **resolved**. There are no items in Jan–Feb or Apr–Nov 2022 and only a few in Mar 2022; winter 2018/19 is thin. This led to the Dec-only 2021/22 window.
+- Pre-2025 S1 revisit for persistence: **resolved**. Asc 130 gives 7 passes per Dec–Feb window (2 in the Dec-only window), which was enough for pilot composites.
+- Gaps (unchanged): no free tide-data source has been researched or verified; terms for viewing very-high-resolution basemaps are unverified ([source register](source-register.md) §2).
+
+**Risks handed off from Stage 04** (details in the [feasibility pilot](feasibility-pilot.md) §7):
+- The G4 and G5a waivers ([ADR 0015](decisions/0015-feasibility-pilot-gates-and-outcome.md)).
+- Thin Dec 2021 window.
+- Four-tile MGRS junction.
+- `WarpedVRT` explicit-grid defect over GCP-only S1 sources (Stage 10).
+- Geocoding accuracy not measured.
+- S1C cross-calibration not isolated.
 
 ## Invalidated Approvals
 
@@ -75,6 +83,9 @@ _None._
 - [Source register](source-register.md)
 - [Profiling report](profiling-report.md)
 - [Source guide](source-guide.md) (learning companion for the Stage 03 sources)
+- [Feasibility pilot](feasibility-pilot.md)
+- [Pilot AOI file](../config/aoi/abu-dhabi-pilot-v1.geojson)
+- [Domain knowledge handbook](domain-knowledge.md) (learning companion across stages; covers Stages 01–03, extend at the end of each stage)
 
 ## Checks Run
 
@@ -86,6 +97,12 @@ _None._
 | 2026-11-14 | 03 | Official documentation and live STAC collection metadata for licences, access and quotas (CDSE, PC, Earth Search, AWS Registry, JRC GHSL, OSM, EC Sentinel legal notice) | Web fetch and search | Verified; the ESA-hosted Sentinel legal notice URL failed DNS, so the EC copy hosted by ECMWF was used |
 | 2026-11-14 | 03 | Bounded probe `.scratch/stage03/probe.py` (env, catalog, access, s2, s1, worldcover, ghsl, osm, cdse) | Windows 11, Python 3.13.14, rasterio 1.5.2 / GDAL 3.12.2, pystac-client 0.9.1; disposable venv | Completed within budget (≤ 0.33 GB of 1 GB); 12 anomalies recorded in the [profiling report](profiling-report.md) |
 | 2026-11-14 | 03 (follow-up) | [Source guide](source-guide.md): mission facts checked against ESA SentiWiki, ESA, GDAL and cogeo.org; code examples run via `.scratch/stage03/guide_examples.py` and the guide's own snippets extracted and run as-is | Same probe environment; ≈ 20 MB per run | Passed; found and documented the negative-reflectance / NDVI-range pitfall |
+| 2026-11-24 | 04 | Read-only environment check (`Get-CimInstance`, `Get-PSDrive`, `wsl --status`, `docker info`) | This laptop | Recorded in [ADR 0012](decisions/0012-laptop-constraints-and-data-budgets.md) |
+| 2026-11-24 | 04 | AOI comparison probe `.scratch/stage04/compare.py` | Stage 03 venv (Python 3.13.14, rasterio 1.5.2 / GDAL 3.12.2) | 312 s, 6.9 MB; 3 candidates compared |
+| 2026-11-24 | 04 | Pilot 1 `.scratch/stage04/pilot.py`: run 1 stopped after an S1 `WarpedVRT` defect; run 2 after the fix | Same | 567.5 MB + 1,209.7 MB; 532.6 s (run 2); peak RSS 1.48 GB; no-go (G4, G5a, G5b) |
+| 2026-11-24 | 04 | Pilot 2 `.scratch/stage04/pilot2.py`: calibrated σ⁰ at sites; Al Ain vegetation patch | Same | 533.1 MB (cumulative 2.32 GB of the 2.6 GB cap); 256.3 s; G5b′ passed; G4 and G5a still failed and were waived by the user |
+| 2026-11-24 | 04 | AOI geometry validation (shapely 2.2.0, pyproj 3.8.0) | Same | Valid, simple, closed, CCW, disjoint parts; areas 561.98 and 100.03 km² |
+| 2026-11-24 | 04 | `py_compile` of `tools/probes/stage04_*.py` | Same | Passed |
 
 ## Blockers
 
