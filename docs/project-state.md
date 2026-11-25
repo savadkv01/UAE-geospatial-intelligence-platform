@@ -15,7 +15,7 @@
 ## Active Stage
 
 - **Active stage:** none
-- **Next action:** run `05-solution-and-data-architecture` when ready; it is not started automatically.
+- **Next action:** run `06-data-modelling-and-contracts` when ready; it is not started automatically.
 
 ## Stage Status
 
@@ -25,7 +25,7 @@
 | 02 | Domain and measurement | complete | [Domain glossary](domain-glossary.md); [Measurement spec](measurement-spec.md); [ADR 0004](decisions/0004-mvp-indicator-families.md); [ADR 0005](decisions/0005-persistence-confirmed-change-semantics.md); [ADR 0006](decisions/0006-temporal-comparability-policy.md); [ADR 0007](decisions/0007-uncertainty-communication.md) | Document review passed and user accepted the Stage 02 outcome on 2026-11-14. |
 | 03 | Source discovery and profiling | complete | [Source register](source-register.md); [Profiling report](profiling-report.md); [Probe script](../tools/probes/stage03_source_probe.py); [ADR 0008](decisions/0008-upstream-stac-providers-and-access-model.md); [ADR 0009](decisions/0009-sentinel-2-l2a-mvp-source.md); [ADR 0010](decisions/0010-sentinel-1-grd-mvp-source-and-level.md); [ADR 0011](decisions/0011-context-layers-and-reference-candidates.md) | Register, report and MVP sources approved on 2026-11-14 (S2 = Earth Search c1 with CDSE fallback; S1 = PC GRD with Earth Search and CDSE fallbacks). Probe used ≤ 0.33 GB of the 1 GB budget. Acceptance checks passed; user accepted the Stage 03 outcome on 2026-11-14. |
 | 04 | AOI and feasibility pilot | complete | [Feasibility pilot](feasibility-pilot.md); [AOI file](../config/aoi/abu-dhabi-pilot-v1.geojson); probes [compare](../tools/probes/stage04_aoi_compare.py), [pilot 1](../tools/probes/stage04_pilot.py), [pilot 2](../tools/probes/stage04_pilot2.py); [ADR 0012](decisions/0012-laptop-constraints-and-data-budgets.md); [ADR 0013](decisions/0013-pilot-aoi.md); [ADR 0014](decisions/0014-observation-period-and-window.md); [ADR 0015](decisions/0015-feasibility-pilot-gates-and-outcome.md) | Outcome **go with recorded waiver** (G4 desert control C3 and G5a U1 failed; waived by the user). AOI = corridor (c) 562 km² + Al Ain patch 100 km², EPSG:32640; period P1 (Dec–Feb 2019/20–2025/26, 2021/22 Dec only). Pilot spend 2.32 GB (cap 2.6 GB); full scope ≈ 8.0 GB download, ≈ 11.3 GB disk (estimates). User accepted the Stage 04 outcome on 2026-11-24. |
-| 05 | Solution and data architecture | not started | — | — |
+| 05 | Solution and data architecture | complete | [Architecture](architecture.md); [ADR 0016–0032](decisions/README.md); [requirements mapping](architecture.md#requirements-traceability) | First accepted 2026-11-25. Revised the same day after review: ADR 0021 (boundary detail) and 0022 superseded by 0027 and 0028; new ADRs 0029–0032 (lineage, catalog, data products, quality gates). User re-accepted the revised outcome on 2026-11-25. All-on RAM ≈ 9.9 GB is an estimate; the revision adds no services. |
 | 06 | Data modelling and contracts | not started | — | — |
 | 07 | Governance and security design | not started | — | — |
 | 08 | Repository and local infrastructure | not started | — | — |
@@ -56,6 +56,9 @@
 - SAR calibration choice: **resolved for the MVP** as σ⁰ from GRD ([ADR 0010](decisions/0010-sentinel-1-grd-mvp-source-and-level.md)); the method is owned by Stage 10.
 - Index families for the deferred capabilities (water, coastal, multi-year) and tide normalisation; decide when each enters scope.
 - CDSE S3 keys are the first platform secret; storage and rotation to be defined in Stage 07 ([ADR 0008](decisions/0008-upstream-stac-providers-and-access-model.md)).
+- Runtime pins, integrated Linux-on-WSL2 compatibility and loaded profile memory are Stage 08 gates; validate the 12 GB aggregate limit target and job/storage budgets in Stages 08 and 18. Safe release retries, orphan-release reconciliation and indexed-only tile access are implementation checks in Stages 13–15 and 19 ([architecture](architecture.md)).
+- Stage 08 handoffs from the Stage 05 review: one Python version across Airflow constraints, PySpark, Sedona, Delta and rasterio; repository and data root inside the Ubuntu-24.04 WSL distro rather than NTFS or Docker Desktop's disk image; Spark jars baked into the image; Spark OpenLineage on 4.1 unverified ([architecture](architecture.md#implementation-feasibility-and-handoffs)).
+- Map-ready vector export format (FlatGeobuf, GeoJSON or PMTiles); Stages 06 and 15. Quality library (GX Core or pandera); Stage 14.
 
 **Open items from Stage 03 — status after Stage 04:**
 - Earth Search c1 coverage re-measured for the chosen AOI: **resolved**. There are no items in Jan–Feb or Apr–Nov 2022 and only a few in Mar 2022; winter 2018/19 is thin. This led to the Dec-only 2021/22 window.
@@ -72,7 +75,7 @@
 
 ## Invalidated Approvals
 
-_None._
+- 2026-11-25: the Stage 05 acceptance is reopened for the publication-boundary detail of [ADR 0021](decisions/0021-local-stac-api.md) and the tiler choice of [ADR 0022](decisions/0022-titiler.md), superseded by [ADR 0027](decisions/0027-stac-visibility-publication-boundary.md) and [ADR 0028](decisions/0028-titiler-pgstac.md). No downstream stage had started, so nothing else is invalidated.
 
 ## Evidence Links
 
@@ -84,8 +87,9 @@ _None._
 - [Profiling report](profiling-report.md)
 - [Source guide](source-guide.md) (learning companion for the Stage 03 sources)
 - [Feasibility pilot](feasibility-pilot.md)
+- [Solution and data architecture](architecture.md)
 - [Pilot AOI file](../config/aoi/abu-dhabi-pilot-v1.geojson)
-- [Domain knowledge handbook](domain-knowledge.md) (learning companion across stages; covers Stages 01–03, extend at the end of each stage)
+- [Domain knowledge handbook](domain-knowledge.md) (learning companion across stages; extend at the end of each stage)
 
 ## Checks Run
 
@@ -103,6 +107,10 @@ _None._
 | 2026-11-24 | 04 | Pilot 2 `.scratch/stage04/pilot2.py`: calibrated σ⁰ at sites; Al Ain vegetation patch | Same | 533.1 MB (cumulative 2.32 GB of the 2.6 GB cap); 256.3 s; G5b′ passed; G4 and G5a still failed and were waived by the user |
 | 2026-11-24 | 04 | AOI geometry validation (shapely 2.2.0, pyproj 3.8.0) | Same | Valid, simple, closed, CCW, disjoint parts; areas 561.98 and 100.03 km² |
 | 2026-11-24 | 04 | `py_compile` of `tools/probes/stage04_*.py` | Same | Passed |
+| 2026-11-25 | 05 | Extract four Mermaid blocks from `architecture.md`; render to SVG with installed Mermaid Chart extension bundle in headless Edge | Windows, Mermaid Chart VS Code extension 2.8.4; local files, no installation or image pulls | Passed 4/4: context, components, data flow and deployment |
+| 2026-11-25 | 05 | Compare requirement IDs with the architecture traceability matrix and check ADR index entries | Local Markdown files | Passed: 14/14 requirement IDs mapped, 11/11 new ADR links resolve; user accepted Stage 05 |
+| 2026-11-25 | 05 (revision) | Web verification of titiler-pgstac, eoAPI, odc-stac, Delta/Spark 4.1, OpenLineage provider, Marquez, OpenMetadata, ODCS/ODPS, datacontract-cli, GX Core/Soda | Web search and fetch; no downloads | Recorded in [architecture](architecture.md) and ADRs 0027–0032; secondary sources labelled |
+| 2026-11-25 | 05 (revision) | Re-render four Mermaid diagrams offline; requirement coverage; relative-link and anchor check | Same local renderer; local Markdown files | Passed: 4/4 diagrams, 14/14 requirements, 0 broken links |
 
 ## Blockers
 

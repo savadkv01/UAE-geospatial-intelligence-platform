@@ -99,6 +99,8 @@ AC-04 and AC-05 are user-approved **proposed target frameworks**, not claims of 
 
 Statuses distinguish approved requirements and proposed targets from assumptions and items deferred for later evidence.
 
+Stage 05 maps every requirement and acceptance criterion to implementation components and verification owners in the [architecture traceability matrix](architecture.md#requirements-traceability). These mappings are not evidence that the operational or analytical targets have been met.
+
 | Requirement ID | Description | Owning stage(s) | Evidence expected | Status |
 | --- | --- | --- | --- | --- |
 | BR-01 | Serve an analyst-facing monitoring use case with an engineering showcase. | 05, 15, 20 | Architecture and analyst-serving design aligned with the approved audience; portfolio narrative. | Approved |

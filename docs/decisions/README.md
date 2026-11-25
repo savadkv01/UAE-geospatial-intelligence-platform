@@ -27,6 +27,23 @@ This folder holds numbered decision records (ADRs) for material project decision
 | [0013](0013-pilot-aoi.md) | Pilot AOI | accepted | 04 | 2026-11-24 |
 | [0014](0014-observation-period-and-window.md) | Observation Period and Window | accepted | 04 | 2026-11-24 |
 | [0015](0015-feasibility-pilot-gates-and-outcome.md) | Feasibility Pilot Gates and Outcome (go with waiver) | accepted | 04 | 2026-11-24 |
+| [0016](0016-persisted-medallion.md) | Persisted Medallion | accepted | 05 | 2026-11-25 |
+| [0017](0017-raster-and-spark-responsibilities.md) | Raster and Spark Responsibilities | accepted | 05 | 2026-11-25 |
+| [0018](0018-wsl2-filesystem-storage.md) | WSL2 Filesystem Storage | accepted | 05 | 2026-11-25 |
+| [0019](0019-delta-and-geoparquet.md) | Delta and GeoParquet | accepted | 05 | 2026-11-25 |
+| [0020](0020-shared-postgres.md) | Shared PostgreSQL/PostGIS | accepted | 05 | 2026-11-25 |
+| [0021](0021-local-stac-api.md) | Local STAC API | superseded by 0027 (boundary detail) | 05 | 2026-11-25 |
+| [0022](0022-titiler.md) | Dynamic Raster Tiles | superseded by 0028 | 05 | 2026-11-25 |
+| [0023](0023-analyst-web-map.md) | Analyst Web Map | accepted | 05 | 2026-11-25 |
+| [0024](0024-airflow-localexecutor.md) | Airflow LocalExecutor | accepted | 05 | 2026-11-25 |
+| [0025](0025-airflow-version.md) | Airflow Release Line | accepted | 05 | 2026-11-25 |
+| [0026](0026-deployment-profiles.md) | Deployment Profiles and Resource Verification | accepted | 05 | 2026-11-25 |
+| [0027](0027-stac-visibility-publication-boundary.md) | STAC Visibility as the Publication Boundary | accepted | 05 | 2026-11-25 |
+| [0028](0028-titiler-pgstac.md) | titiler-pgstac for Dynamic Tiles | accepted | 05 | 2026-11-25 |
+| [0029](0029-built-in-lineage.md) | Built-in Lineage | accepted | 05 | 2026-11-25 |
+| [0030](0030-stac-as-product-catalog.md) | STAC as the Product Catalog | accepted | 05 | 2026-11-25 |
+| [0031](0031-data-products-and-contracts.md) | Data Products and Contracts | accepted | 05 | 2026-11-25 |
+| [0032](0032-layered-quality-gates.md) | Layered Quality Gates | accepted | 05 | 2026-11-25 |
 
 ## Template
 

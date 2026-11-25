@@ -2,7 +2,7 @@
 
 - Purpose: build working domain knowledge of Earth-observation (EO) change monitoring from four angles: **data engineer, subject-matter expert (SME), data architect and domain architect**.
 - Audience: an experienced data engineer who is new to geospatial. It is technical, not academic. It explains the *logic* and *why* behind each approved choice, not the full physics.
-- Covers: Stages **01–03** (all complete as of 2026-11-14). Stage 04 onward is not started, so nothing here describes AOI choice, pipelines, storage or algorithms beyond what has been decided.
+- Covers: Stages **01–03** and **05**, with the Stage 04 constraints that shaped the architecture. See the [feasibility pilot](feasibility-pilot.md) for the full AOI and measurement evidence.
 - Authority: this is a learning companion. If it disagrees with an approved artifact, the artifact wins: [requirements](requirements.md), [domain glossary](domain-glossary.md), [measurement spec](measurement-spec.md), [source register](source-register.md), [profiling report](profiling-report.md), [ADRs](decisions/README.md). Hands-on code and product-name decoding are in the [source guide](source-guide.md).
 
 **Fact labels** (same as the rest of the project): **verified** (from documentation), **measured** (from our probe), **decided** (user-approved ADR), **assumption**, **proposed target** (a number not yet validated).
@@ -286,6 +286,19 @@ A full CDSE S1 COG is ≈ 0.5 GB per polarisation per scene (**measured**), whic
 
 ---
 
+### Stage 05 — Solution and Data Architecture (complete 2026-11-25)
+
+- **Stage 04 input:** The pilot measures 1.48 GB peak process RSS, not the memory of a complete deployment. The grid is EPSG:32640 at 10 m; the Dec-only 2021/22 window and the radar control/urban waivers stay visible downstream.
+- **Data engineer:** A COG lets a reader fetch only tiles/overviews relevant to a request. Python/GDAL handles aligned arrays; Spark/Sedona handles spatial joins and aggregates of rows. Local Spark shows partitions and shuffles, not cluster throughput.
+- **SME:** Catalogue search finds the correct observation window; a tile renderer shows the pixels. Neither makes a candidate signal more certain. Show coverage, counts and confidence evidence alongside the rendered signal.
+- **Data architect:** Persist bronze for replay and silver for restart. Pin Delta snapshots, export interoperable assets, promote the files, then commit the STAC item. A retry reconciles the gap between filesystem promotion and catalogue commit without duplicating products.
+- **Domain architect:** Keep catalogue discovery, asset delivery and interpretation separate. The optional serving and monitoring profiles should not inflate the minimal processing footprint. The 9.9 GB all-on estimate is a Stage 08 measurement target, not a result.
+- **Review revision (same day):** STAC visibility is the publication boundary ([ADR 0027](decisions/0027-stac-visibility-publication-boundary.md)), and titiler-pgstac renders only indexed Items ([ADR 0028](decisions/0028-titiler-pgstac.md)). Lineage is built in: run manifests, Delta lineage tables, STAC `derived_from` links and OpenLineage event files ([ADR 0029](decisions/0029-built-in-lineage.md)). STAC is the product catalog, because a metadata catalog service such as OpenMetadata needs more RAM than the laptop has ([ADR 0030](decisions/0030-stac-as-product-catalog.md)). Each capability is a **data product**: a STAC Collection with an ODPS descriptor and ODCS contracts, with rasters specified through STAC extensions, since ODCS has no raster type ([ADR 0031](decisions/0031-data-products-and-contracts.md)). Quality gates sit at every layer with quarantine ([ADR 0032](decisions/0032-layered-quality-gates.md)).
+
+See the [architecture](architecture.md) and [Stage 05 ADRs](decisions/README.md).
+
+---
+
 ## 7. Perspective Summaries
 
 ### 7.1 Data engineer — "how does data move and break?"
@@ -312,7 +325,7 @@ A full CDSE S1 COG is ≈ 0.5 GB per polarisation per scene (**measured**), whic
 - **Band-mapping table** across providers (`red` ↔ `B04` ↔ `B04_10m`).
 - **Grouping keys:** observation window, season (anniversary), relative orbit, pass direction.
 - **Licence segregation:** OSM-derived data stored and published separately (ODbL).
-- Storage formats (COG, Zarr, GeoParquet, table formats) are **candidates only** — Stages 05/06/09/10 decide ([source guide, Part C](source-guide.md)).
+- **Storage and delivery:** COG rasters; Delta tables with WKB/bbox and GeoParquet exports; PgSTAC defines discovery visibility. Stage 06 sets exact contracts.
 
 ### 7.4 Domain architect — "how do capabilities, sensors and evidence fit together?"
 
@@ -375,6 +388,7 @@ This section compares this portfolio project with how an established Earth-obser
 | **Licensing** (03) | CC BY / ODbL / Copernicus notices; OSM kept separate | Commercial imagery comes with **per-customer licence tiers** (view, derive, redistribute). Legal review is part of product release; licence metadata is enforced in the catalogue | Licence-aware data modelling and segregation |
 | **Lineage and reproducibility** (01–03) | Lineage fields planned: source Item IDs, provider, baseline, CRS, code version | Mandatory and audited: from tasking order through acquisition, processing version, analyst and delivery. Often needed for legal or contractual defence of a finding | Lineage design is the same; the stakes are higher |
 | **Operations** (01) | Airflow, recovery and idempotency demonstrated on a laptop (planned) | 24/7 operations, monitoring and incident management; ground-station scheduling; capacity planning | The orchestration and idempotency patterns are the same |
+| **Publication** (05) | Promote immutable files on ext4, then index them in PgSTAC | Object stores have no directory rename; use immutable release keys and a catalogue/manifest commit that gates serving | Keep visibility separate from writing the bytes and test the gap between the two |
 
 ### 8.4 Who owns what in an enterprise (role mapping)
 
@@ -424,11 +438,11 @@ From [project state](project-state.md); each will add knowledge to this document
 
 | Question | Resolves in |
 | --- | --- |
-| Exact AOI; seasonal coverage on it; the Earth Search 2022 gap | Stage 04 |
-| Common target CRS across UTM 39N/40N | Stage 04 or 10 |
-| Enough pre-2025 S1 scenes per window for N-window persistence | Stage 04 / 12 |
+| Runtime pins, integrated compatibility and loaded profile memory | Stages 08 and 18 |
+| Verify S1 geocoding and comparable aligned rasters on the chosen EPSG:32640 grid | Stage 10 |
+| Evaluate persistence with the selected S1 track and reduced 2021/22 window | Stage 12 |
 | N, minimum mapping unit, compositing method, SCL class 2 masking, confidence-class rules | Stage 04 / 12 |
-| Observation-window length and freshness deadline | Stages 03, 13, 18 |
+| Freshness deadline for the selected Dec–Feb anniversary windows | Stages 13 and 18 |
 | Reference source, agreement metric and thresholds | Stage 12 |
 | CDSE key storage and rotation | Stage 07 |
 | Tide data source; VHR basemap terms | When coastal scope enters / Stage 12 |
@@ -442,3 +456,5 @@ From [project state](project-state.md); each will add knowledge to this document
 | --- | --- | --- |
 | 2026-11-24 | 01–03 | Initial handbook created from approved Stage 01–03 artifacts and ADRs 0001–0011 |
 | 2026-11-24 | 01–03 | Added §8 Enterprise lens: public facts on Space42 and MBRSC, and general industry practice for each topic |
+| 2026-11-25 | 05 | Added engine, storage and publication design lessons and Stage 04 inputs to the architecture |
+| 2026-11-25 | 05 | Added the review revision: publication boundary, tiler, lineage, catalog, data products and quality gates |
